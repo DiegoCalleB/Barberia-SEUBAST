@@ -4,7 +4,7 @@ import { ArrowRight } from 'lucide-react';
 
 export function Hero() {
   return (
-    <section className="relative h-screen min-h-[800px] flex items-center overflow-hidden">
+    <section className="relative h-screen min-h-[600px] md:min-h-[800px] flex items-center overflow-hidden">
       <div className="absolute inset-0 z-0">
         <img
           alt="Barbería de lujo vintage"
@@ -15,28 +15,31 @@ export function Hero() {
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/40 to-background"></div>
       </div>
 
-      <div className="relative z-10 w-full px-6 md:px-12 max-w-[1920px] mx-auto mt-20">
+      <div className="relative z-10 w-full px-4 sm:px-6 md:px-12 max-w-[1920px] mx-auto mt-12 md:mt-20">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: 'easeOut' }}
           className="max-w-4xl"
         >
-          <span className="inline-block text-primary font-label uppercase tracking-[0.4em] text-xs mb-6">
+          <span className="inline-block text-primary font-label uppercase tracking-[0.4em] text-[10px] md:text-xs mb-4 md:mb-6">
             Establecido MCMXCIX
           </span>
-          <h1 className="serif-display text-6xl md:text-9xl font-bold leading-tight tracking-tight text-on-background mb-8">
+          <h1 className="serif-display text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-bold leading-[1.1] tracking-tight text-on-background mb-6 md:mb-8">
             La Artesanía <br />
             <span className="italic font-normal text-primary">del Corte</span>
           </h1>
           
-          <div className="flex flex-col md:flex-row items-start md:items-center gap-10 mt-12">
-            <button className="bg-primary text-on-primary px-10 py-5 rounded-sm font-label uppercase text-sm tracking-widest font-bold flex items-center gap-3 hover:shadow-[0_0_30px_rgba(233,193,118,0.2)] transition-all duration-500 group">
+          <div className="flex flex-col md:flex-row items-start md:items-center gap-6 md:gap-10 mt-8 md:mt-12">
+            <button 
+              data-booking-trigger
+              className="w-full md:w-auto justify-center bg-primary text-on-primary px-8 py-4 md:px-10 md:py-5 rounded-sm font-label uppercase text-xs md:text-sm tracking-widest font-bold flex items-center gap-3 hover:shadow-[0_0_30px_rgba(233,193,118,0.2)] transition-all duration-500 group"
+            >
               Reservar Experiencia
               <ArrowRight className="group-hover:translate-x-1 transition-transform" />
             </button>
             <div className="hidden md:block h-[1px] w-24 bg-outline-variant/30"></div>
-            <p className="font-body text-on-surface-variant max-w-xs text-sm uppercase tracking-widest leading-loose">
+            <p className="font-body text-on-surface-variant max-w-xs text-[10px] md:text-sm uppercase tracking-widest leading-loose">
               La Barbería Selecta definitiva para el caballero moderno.
             </p>
           </div>

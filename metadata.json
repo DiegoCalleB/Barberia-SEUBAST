@@ -1,5 +1,5 @@
 {
   "name": "SEUBAST - Barbería Selecta",
   "description": "Barbería de barrio premium con herencia italiana. Corte artesanal, boutique de productos exclusivos y sistema de reservas online.",
-  "requestFramePermissions": []
+  "requestFramePermissions": ["camera"]
 }

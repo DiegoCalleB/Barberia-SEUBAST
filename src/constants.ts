@@ -1,78 +1,361 @@
 export const SERVICES = [
   {
-    id: 'corte-estudio',
-    name: 'Corte de Pelo de Estudio',
-    description: 'Sastrería de precisión que incluye consulta detallada, lavado de autor con extractos botánicos y peinado personalizado. Finalizado con limpieza de cuello a navaja clásica.',
-    price: 75,
-    duration: 60,
-    category: 'hair'
-  },
-  {
-    id: 'tratamiento-capilar',
-    name: 'Tratamiento Capilar',
-    description: 'Un ritual de desintoxicación vigorizante. Incluye una mascarilla refrescante de mentol, masaje craneal profundo y terapia de vapor para revitalizar el folículo piloso.',
-    price: 45,
+    id: 'corte-pelo',
+    name: 'Corte de pelo',
+    description: 'Descubre el arte del corte de pelo en Barbería Seubast. Nuestros expertos barberos están dedicados a brindarte un servicio excepcional.',
+    price: 14.90,
     duration: 30,
-    category: 'hair'
+    category: 'Cabello',
+    featured: true,
+    requiresStyle: true
   },
   {
-    id: 'afeitado-lujo',
-    name: 'Afeitado de Lujo',
-    description: 'La máxima indulgencia. Proceso de siete pasos que incluye aplicación de aceite caliente, múltiples toallas al vapor, espumado con brocha de tejón y afeitado a navaja de dos pasadas.',
-    price: 60,
+    id: 'perfilado-barba-maquina',
+    name: 'Perfilado de Barba a Máquina',
+    description: 'Perfilado preciso de barba utilizando máquina.',
+    price: 7,
+    duration: 15,
+    category: 'Barba',
+    featured: false
+  },
+  {
+    id: 'camuflaje-canas-barba',
+    name: 'Camuflaje de Canas para Barba',
+    description: 'Tratamiento para disimular las canas de la barba de forma natural.',
+    price: 12,
+    duration: 15,
+    category: 'Barba',
+    featured: false
+  },
+  {
+    id: 'corte-arreglo-barba-tradicional',
+    name: 'Corte de Pelo + Arreglo de Barba tradicional (Completo)',
+    description: 'Servicio completo de corte de pelo y arreglo de barba tradicional.',
+    price: 25,
+    duration: 50,
+    category: 'Cabello y Barba',
+    featured: true,
+    discount: 'Ahorra un 13%',
+    requiresStyle: true
+  },
+  {
+    id: 'corte-arreglo-barba-express',
+    name: 'Corte de Pelo + Arreglo express de Barba (Simple)',
+    description: 'Corte de pelo acompañado de un arreglo rápido de barba.',
+    price: 22.90,
     duration: 45,
-    category: 'beard'
+    category: 'Cabello y Barba',
+    featured: false,
+    discount: 'Ahorra un 11%',
+    requiresStyle: true
   },
   {
-    id: 'esculpido-barba',
-    name: 'Esculpido de Barba',
-    description: 'Modelado arquitectónico meticuloso con tijeras y máquinas. Incluye perfilado a navaja y acondicionamiento con aceite orgánico de cedro para barba.',
-    price: 40,
+    id: 'afeitado-cabeza-arreglo-barba',
+    name: 'Afeitado de Cabeza con Navaja + Arreglo de barba tradicional (completo)',
+    description: 'Afeitado de cabeza con navaja y arreglo completo de barba tradicional.',
+    price: 27,
+    duration: 50,
+    category: 'Cabello y Barba',
+    featured: false,
+    discount: 'Ahorra un 7%'
+  }
+];
+
+export const HAIRCUT_STYLES = [
+  {
+    id: 'fade',
+    name: 'Degradado / Fade',
+    description: 'Transición perfecta de piel a cabello largo. Moderno y muy demandado.',
+    aiPrompt: 'Genera un corte de pelo estilo "Fade" o Degradado. La transición debe ser muy limpia desde la piel (skin fade) sin líneas bruscas, difuminado progresivamente hacia la parte superior. Deja longitud y textura en la parte de arriba.',
+    duration: 45,
+    price: 16.90,
+    image: '/cortes_pelo/corte_fade.jpg'
+  },
+  {
+    id: 'classic',
+    name: 'Corte Clásico a Tijera',
+    description: 'Elegancia de toda la vida. Corte estructurado realizado íntegramente a tijera.',
+    aiPrompt: 'Genera un corte clásico y elegante de caballero hecho todo a tijera (Executive contour). No debe haber zonas rapadas, manteniendo los laterales peinados e integrados perfectamente con la parte superior, con raya lateral y aspecto limpio.',
+    duration: 40,
+    price: 14.90,
+    image: '/cortes_pelo/Corte_Clasico.jpg'
+  },
+  {
+    id: 'crop',
+    name: 'Flequillo Texturizado / French Crop',
+    description: 'Estilo moderno con el pelo hacia adelante y los lados muy cortos.',
+    aiPrompt: 'Genera un peinado "French Crop". Los laterales deben estar rapados o con un degradado alto. La parte superior debe ir peinada hacia adelante con flequillo corto y texturizado para que note mucho movimiento y desorden ordenado.',
+    duration: 35,
+    price: 15.90,
+    image: '/cortes_pelo/Corte_flequillo.jpg'
+  },
+  {
+    id: 'mullet',
+    name: 'Corto a los lados, largo atrás / Mullet',
+    description: 'Rebeldía con estilo. Laterales cortos y volumen en la nuca.',
+    aiPrompt: 'Genera un corte estilo "Mullet" moderno. Laterales cortos o rapados, mientras que debe conservar mucha longitud y volumen en la zona de la nuca y el cuello trasero. Zona frontal desaliñada.',
+    duration: 50,
+    price: 17.90,
+    image: '/cortes_pelo/Corte_seta.jpg' // Fallback mapping as user didn't explicitly upload "mullet" but did an array of cuts
+  },
+  {
+    id: 'buzz',
+    name: 'Rapado a Máquina / Buzz Cut',
+    description: 'Uniforme, rápido y muy cómo. Ideal para no tener que peinarse.',
+    aiPrompt: 'Genera un corte "Buzz Cut" (rapado a máquina completo). Todo el cabello debe verse de una longitud muy reducida de manera uniforme (1-3 milímetros) y perfilado perfectamente en la frente.',
+    duration: 20,
+    price: 12.90,
+    image: '/cortes_pelo/corte_rapado.jpg'
+  },
+  {
+    id: 'pompadour',
+    name: 'Tupé Clásico / Pompadour',
+    description: 'Gran volumen en la parte superior bien domado. Estilo rockabilly o clásico audaz.',
+    aiPrompt: 'Genera un "Pompadour" o tupé clásico muy voluminoso. Los laterales en degradado y muchísimo volumen en el flequillo que se echa hacia atrás con fijador fuerte. Debe verse muy pulcro.',
+    duration: 50,
+    price: 18.90,
+    image: '/cortes_pelo/corte_pompadour.jpg'
+  },
+  {
+    id: 'mohawk',
+    name: 'Cresta / Mohawk',
+    description: 'Línea de pelo central con los lados rapados al límite.',
+    aiPrompt: 'Genera una cresta "Mohawk". Laterales afeitados a cero y una franja central de cabello largo levantada o despeinada en punta con mucha textura y rebeldía.',
+    duration: 45,
+    price: 16.90,
+    image: '/cortes_pelo/corte_mohicano.jpg'
+  },
+  {
+    id: 'top-knot',
+    name: 'Moño Superior / Top Knot',
+    description: 'Largo por arriba recogido en coleta o moño, y laterales al ras.',
+    aiPrompt: 'Genera un "Top Knot" (moño de samurai). Los lados y la parte posterior muy rapados (undercut), y un moño tirante o coleta pequeña amarrada en la parte alta de la coronilla.',
+    duration: 40,
+    price: 15.90,
+    image: '/cortes_pelo/corte_cabello_largo.jpg'
+  },
+  {
+    id: 'slick-back',
+    name: 'Engominado hacia atrás / Slick Back',
+    description: 'Control absoluto con fijador. Un aspecto pulcro de mafia de los años 20.',
+    aiPrompt: 'Genera un "Slick Back" estilo años 20. Todo el cabello engominado, tirante y peinado hacia atrás de forma ultra elegante y brillante. Sin volumen superior, todo muy pegado a la cabeza.',
+    duration: 35,
+    price: 14.90,
+    image: '/cortes_pelo/corte_comb_over.jpg'
+  }
+];
+
+export const BEARD_STYLES = [
+  {
+    id: 'beard-short',
+    name: 'Barba Corta (de 3 Días)',
+    description: 'Aspecto relajado pero controlado. Muy atractiva y marca la mandíbula.',
+    aiPrompt: 'Coloca una barba tipo "stubble" o de pocos días (3 días aprox). Es un sombreado uniforme que debe marcar muy bien la línea de la mandíbula pero con un aspecto relajado y sin longitud sobrante.',
+    duration: 15,
+    price: 7.00,
+    image: '/cortes_barba/tres_dias.jpg'
+  },
+  {
+    id: 'beard-corporate',
+    name: 'Barba Arreglada / Corporativa',
+    description: 'Tupida pero muy bien recortada. Formal y perfecta para ir a la oficina.',
+    aiPrompt: 'Coloca una barba completa o "Corporate Beard". Tiene longitud pero está cuidada al milímetro. La línea de debajo del cuello debe estar perfectamente afeitada y las líneas de perfilado de mejilla deben ser hiper precisas.',
+    duration: 25,
+    price: 12.00,
+    image: '/cortes_barba/hipster.jpg'
+  },
+  {
+    id: 'beard-viking',
+    name: 'Barba Larga / Vikinga',
+    description: 'Para hombres con paciencia. Mantenemos el orden pero dejamos crecer la longitud.',
+    aiPrompt: 'Añade una barba vikinga épica. Muy larga y abundante que cuelgue del mentón, pero se debe notar cuidada y peinada con un suave acabado final. Must be robust and massive.',
+    duration: 35,
+    price: 15.00,
+    image: '/cortes_barba/full_bear_oso.jpg'
+  },
+  {
+    id: 'beard-goatee',
+    name: 'Perilla / Goatee',
+    description: 'Corte que aísla y resalta la zona de la barbilla y bigote.',
+    aiPrompt: 'Coloca una perilla "Goatee" tradicional. Barba confinada únicamente a la barbilla y unida al bigote. El resto de mejillas y mandíbula deben estar completamente afeitadas.',
+    duration: 20,
+    price: 9.00,
+    image: '/cortes_barba/candado.jpg'
+  },
+  {
+    id: 'beard-balbo',
+    name: 'Barba sin patillas / Balbo',
+    description: 'Como la perilla, pero se extiende un poco más por la mandíbula, separada del bigote.',
+    aiPrompt: 'Añade un estilo "Balbo". El bigote largo flotante separado de la barba, y una barba espesa en la barbilla que se estira un poco por la mandíbula formando una T invertida. Mejillas afeitadas.',
     duration: 30,
-    category: 'beard'
+    price: 14.00,
+    image: '/cortes_barba/ancla.jpg'
+  },
+  {
+    id: 'beard-van-dyke',
+    name: 'Perilla y Bigote / Van Dyke',
+    description: 'Bigote separado de una perilla de pico. Un toque muy bohemio e intelectual.',
+    aiPrompt: 'Coloca un "Van Dyke". Un bigote con las puntas ligeramente rizadas o estiradas, separado de un pequeño parche de pelo afilado y puntiagudo en la barbilla. Muy teatral.',
+    duration: 25,
+    price: 12.00,
+    image: '/cortes_barba/van_dyke.jpg'
+  },
+  {
+    id: 'beard-mutton-chops',
+    name: 'Patillas Anchas / Mutton Chops',
+    description: 'Patillas exageradas uniéndose casi a la boca, pero barbilla al descubierto.',
+    aiPrompt: 'Ponle "Mutton Chops". Unas enormes patillas retro que dominan toda la mejilla uniéndose al bigote, mientras el área entera de la barbilla o mentón está completamente rapada al ras.',
+    duration: 30,
+    price: 14.00,
+    image: '/cortes_barba/chevron.jpg'
+  },
+  {
+    id: 'beard-garibaldi',
+    name: 'Barba Ancha y Redondeada / Garibaldi',
+    description: 'Frondosa pero se recorta la base para mantener una forma ovalada compacta.',
+    aiPrompt: 'Añade una barba "Garibaldi". Una gran barba abundante, algo salvaje arriba, pero que en la base o borde inferior se ha recortado con máquina formando una perfecta curva ancha circular y simétrica.',
+    duration: 40,
+    price: 16.00,
+    image: '/cortes_barba/garibaldi.jpg'
+  }
+];
+
+export const COMBINED_STYLES = [
+  {
+    id: 'look-executive',
+    name: 'Look Ejecutivo / Executive Look',
+    description: 'Corte clásico a tijera y barba arreglada impecable. Ideal para transmitir confianza.',
+    duration: 60,
+    price: 25.00,
+    image: '/cortes_pelo/Corte_Clasico.jpg'
+  },
+  {
+    id: 'look-modern-viking',
+    name: 'Look Vikingo / Modern Viking',
+    description: 'Rapado o degradado alto y barba vikinga. El contraste más duro y llamativo.',
+    duration: 55,
+    price: 26.00,
+    image: '/cortes_barba/full_bear_oso.jpg'
+  },
+  {
+    id: 'look-urban-fade',
+    name: 'Look Urbano / Urban Fade & Stubble',
+    description: 'Degradado medio muy perfilado y barba sombreada de pocos días. Frescura total.',
+    duration: 50,
+    price: 22.00,
+    image: '/cortes_pelo/corte_fade.jpg'
   }
 ];
 
 export const PRODUCTS = [
   {
     id: 'aceite-barba',
-    name: 'Aceite de Barba',
-    description: 'Infusión de cítricos sicilianos y sándalo para un acabado majestuoso.',
+    name: 'Aceite para Barba Cítrico (Men Matter)',
+    description: 'Aceite para barba con infusión cítrica. 30ml de cuidado premium para mantener el vello facial hidratado y con un aroma fresco.',
     price: 42,
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCFVMeboq3f4vrtzqWExwEUyaalv44Hm0JXlMrfeWovFax4JR-tLfbcURKK1x6vYmTs3lzWmJYrLy-JPJcgq3ZhtATDC_dQ6gVwtfcFchSlq0_XrgKTYrRJtQrANZ-PMS5bXw50XHhn9xeILk58BilNzTMgtGS32v5El0GXMrFRrK05MhLMq48v5DCETMvqMAl8gQ6mDFYSLdWEPz4at8HlCllkGPMfoHVhEh2zxbx8wzz2SzqoK3TuV41ZvfkwDu8unKPAP74WT21Y',
-    category: 'Beard Care'
+    image: '/boutique/men-matter-oil.jpg',
+    category: 'Barba'
   },
   {
-    id: 'cepillo-ebano',
-    name: 'Cepillo de Ébano',
-    description: 'Madera de ébano tallada a mano con cerdas de jabalí de origen ético.',
-    price: 65,
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBGuL5Zfs_iSb-nlzl9s3eE6K5w0Q-6--FLF3Qi2Uwc7u_tAho3C94j4C5n8k55qtqNK2Y5tq4JVk03Rm-ciYr4yxNWV8bVUmEjBMzS3CFLPAYZ47dR9Dcczb6UEKwis2eJt4Z71DqY8qPEbGkw8BODz5_cXyF9_h09IB748HwQep-onQljIjM3aztKlbROqVNoql3XWRaJ7DA9EI962sbFfMObUhqOZdJ9Ml15923LJqoU4cIDZ9_1L3M0EeslP-rJ4-Wde-cpm6zc',
-    category: 'Accessories'
+    id: 'cepillo-barba-viking',
+    name: 'Cepillo para Barba de Jabalí (Striking Viking)',
+    description: 'Cepillo de madera 100% natural con cerdas de jabalí negro. Ideal para distribuir aceites y desenredar la barba.',
+    price: 25,
+    image: '/boutique/striking-viking-brush.jpg',
+    category: 'Accesorios'
   },
   {
     id: 'cera-mate',
-    name: 'Cera Mate',
-    description: 'Arcilla mate de alta fijación con minerales volcánicos del Etna.',
+    name: 'Cera de Fijación Mate (The Pure)',
+    description: 'Cera de acabado mate puro. Proporciona una fijación excelente sin dejar brillos indeseados en el cabello.',
     price: 38,
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCZtM3gdpGoAATfQTsqCloFa_VeEF82k-tkPEqo6VbL-yLYQDjhgbYinzzhnGxA-NTCCUovYF6lSR1YoGUpnC045hRIx--QBzA6QiCsEiZnlXdlOWf3EquAVQNgDFFSPUrZwkizMYOCK90bZJJE7C0GFNAr1ki23BLk5pycQxCIePo0zV_QNgk0pAKYS8vPjPD4ZN9oLJBUFg21zDm01qPRijja6P56Z2FZFK4gl4b2IFSQo5GpO_N30LPw7YshCQAwJoY5FQjXJtWg',
-    category: 'Hair Styling'
+    image: '/boutique/pure-matte-wax.jpg',
+    category: 'Pelo'
+  },
+  {
+    id: 'polvos-volumen',
+    name: 'Polvos Voluminizadores (Beardburys)',
+    description: 'Polvos de volumen para el cabello con aplicador preciso. Aporta textura y cuerpo al instante con aspecto natural y mate.',
+    price: 28,
+    image: '/boutique/beardburys-hover.jpg',
+    category: 'Pelo'
+  },
+  {
+    id: 'aftershave-balm',
+    name: 'Bálsamo Aftershave Calmante (Tahe)',
+    description: 'Bálsamo aftershave calmante e hidratante con Bisabolol, Alantoína y Ginseng Indio. Protege la piel irritada.',
+    price: 35,
+    image: '/boutique/tahe-aftershave.jpg',
+    category: 'Barba'
+  },
+  {
+    id: 'shampoo-barba',
+    name: 'Champú para Barba Refrescante (Proraso)',
+    description: 'Champú para barba refrescante formulado para limpiezas profundas respetando el vello facial.',
+    price: 32,
+    image: '/boutique/proraso-wash.jpg',
+    category: 'Barba'
+  },
+  {
+    id: 'pomada-fuerte',
+    name: 'Pomada Clásica Fijación Fuerte (Doctor Barber)',
+    description: 'Pomada clásica original de bajo brillo. Fijación de alta calidad estilo barbershop desde 1948.',
+    price: 40,
+    image: '/boutique/doctor-barber-pomade.jpg',
+    category: 'Pelo'
+  },
+  {
+    id: 'peine-sandalo',
+    name: 'Peine Pequeño de Sándalo (ZilberHaar)',
+    description: 'Cuidado artesanal: peine especializado para desenredar y dar forma a barbas y bigotes con la máxima delicadeza.',
+    price: 25,
+    image: '/boutique/peine_de_sandalo.jpg', // Using the alternative naming that was created
+    category: 'Accesorios'
   }
 ];
 
 export const SUBSCRIPTIONS = [
   {
-    id: 'standard',
-    name: 'Tarifa Plana Standard',
-    price: 45,
+    id: 'essential-look',
+    name: 'Essential Look',
+    price: 24.90,
     period: 'mes',
-    features: ['1 Corte de pelo al mes', 'Lavado incluido', 'Asesoramiento personalizado', '10% dto en productos']
+    features: [
+      '1 Corte de pelo al mes (incluye lavado)',
+      'Perfilado de cejas con navaja (cortesía)',
+      '10% de descuento en productos de fijación y barba'
+    ],
+    target: 'El cliente estándar que se corta el pelo una vez al mes.',
+    highlight: false
   },
   {
-    id: 'premium',
-    name: 'Tarifa Plana Premium',
-    price: 75,
+    id: 'executive-grooming',
+    name: 'Executive Grooming',
+    price: 39.90,
     period: 'mes',
-    features: ['Cortes ilimitados', 'Lavado y tratamiento incluido', 'Arreglo de barba ilimitado', '20% dto en productos', 'Acceso a eventos exclusivos']
+    features: [
+      'Cortes de pelo ilimitados (Máx. 1/semana)',
+      '1 Arreglo de barba tradicional al mes',
+      'Lavado con masaje capilar en cada visita',
+      '15% de descuento en todos los productos'
+    ],
+    target: 'El hombre que cuida su imagen semanalmente y lleva barba.',
+    highlight: true
+  },
+  {
+    id: 'total-prestige',
+    name: 'Total Prestige',
+    price: 54.90,
+    period: 'mes',
+    features: [
+      'Corte de pelo y lavado ilimitados',
+      'Arreglo de barba ilimitado',
+      '1 Camuflaje de canas para barba al mes',
+      'Perfilado de cejas en cada visita',
+      '20% de descuento en productos',
+      'Reserva prioritaria vía web'
+    ],
+    target: 'El perfil VIP que quiere olvidarse de la cartera y estar siempre impecable.',
+    highlight: false
   }
 ];

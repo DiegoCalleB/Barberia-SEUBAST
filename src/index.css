@@ -42,5 +42,13 @@
   .text-glow:hover {
     text-shadow: 0 0 15px rgba(233, 193, 118, 0.4);
   }
+
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
 }
 
