@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Menu, X, ShoppingBag, User as UserIcon } from 'lucide-react';
+import { auth } from '../lib/firebase';
+import { signInWithPopup, GoogleAuthProvider, signOut } from 'firebase/auth';
 import { useAuth } from '../lib/useAuth';
 import { cn } from '../lib/utils';
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { user, profile, login, logout } = useAuth();
+  const { user, profile } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
@@ -16,14 +18,15 @@ export function Navbar() {
   }, []);
 
   const handleLogin = async () => {
+    const provider = new GoogleAuthProvider();
     try {
-      login();
+      await signInWithPopup(auth, provider);
     } catch (error) {
       console.error('Login failed', error);
     }
   };
 
-  const handleLogout = () => logout();
+  const handleLogout = () => signOut(auth);
 
   const navLinks = [
     { name: 'La Esencia', href: '#esencia' },

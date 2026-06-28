@@ -4,48 +4,9 @@ import { Camera, Upload, Sparkles, RefreshCw, ChevronRight, Info, CheckCircle2, 
 import { analyzeFace, generateTryOn, StylistAnalysis } from '../services/geminiService';
 import { HAIRCUT_STYLES, BEARD_STYLES } from '../constants';
 import { useAuth } from '../lib/useAuth';
-
-function compressBase64Image(base64Str: string, maxWidth: number = 400, quality: number = 0.7): Promise<string> {
-  return new Promise((resolve) => {
-    if (!base64Str || !base64Str.startsWith('data:image/')) {
-      resolve(base64Str);
-      return;
-    }
-    const img = new Image();
-    img.onload = () => {
-      try {
-        const canvas = document.createElement('canvas');
-        let width = img.width;
-        let height = img.height;
-
-        if (width > maxWidth) {
-          height = Math.round((height * maxWidth) / width);
-          width = maxWidth;
-        }
-
-        canvas.width = width;
-        canvas.height = height;
-
-        const ctx = canvas.getContext('2d');
-        if (!ctx) {
-          resolve(base64Str);
-          return;
-        }
-
-        ctx.drawImage(img, 0, 0, width, height);
-        const compressed = canvas.toDataURL('image/jpeg', quality);
-        resolve(compressed);
-      } catch (e) {
-        console.error("Compression error:", e);
-        resolve(base64Str);
-      }
-    };
-    img.onerror = () => {
-      resolve(base64Str);
-    };
-    img.src = base64Str;
-  });
-}
+import { db, OperationType, handleFirestoreError, auth } from '../lib/firebase';
+import { collection, addDoc, getDocs, query, where, deleteDoc, doc, serverTimestamp } from 'firebase/firestore';
+import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 
 export function AIStylist({ onBookStyle }: { onBookStyle: (id: string) => void }) {
   const [category, setCategory] = useState<'hair' | 'beard' | 'both'>('both');
@@ -74,7 +35,7 @@ export function AIStylist({ onBookStyle }: { onBookStyle: (id: string) => void }
   const [customInstructions, setCustomInstructions] = useState<string>('');
 
   // Auth & Saved Looks States
-  const { user, login } = useAuth();
+  const { user } = useAuth();
   const [savedLooks, setSavedLooks] = useState<any[]>([]);
   const [isSavingLook, setIsSavingLook] = useState(false);
   const [isLoadingSaved, setIsLoadingSaved] = useState(false);
@@ -86,8 +47,9 @@ export function AIStylist({ onBookStyle }: { onBookStyle: (id: string) => void }
     if (!user) return;
     setIsLoadingSaved(true);
     try {
-      const stored = localStorage.getItem(`saved_looks_${user.uid}`);
-      const looks = stored ? JSON.parse(stored) : [];
+      const q = query(collection(db, 'saved_looks'), where('uid', '==', user.uid));
+      const querySnapshot = await getDocs(q);
+      const looks = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       setSavedLooks(looks);
     } catch (err) {
       console.error("Error fetching saved looks:", err);
@@ -120,7 +82,12 @@ export function AIStylist({ onBookStyle }: { onBookStyle: (id: string) => void }
 
   const handleSaveLook = async () => {
     if (!user) {
-      login();
+      const provider = new GoogleAuthProvider();
+      try {
+        await signInWithPopup(auth, provider);
+      } catch (error) {
+        console.error('Login failed', error);
+      }
       return;
     }
     if (!selectedOverlay || !image) return;
@@ -142,42 +109,38 @@ export function AIStylist({ onBookStyle }: { onBookStyle: (id: string) => void }
 
     setIsSavingLook(true);
     try {
-      // Compress both original and generated images to stay well below limits
-      const [compressedOriginal, compressedGenerated] = await Promise.all([
-        compressBase64Image(image, 400, 0.7),
-        compressBase64Image(currentGeneratedImage, 400, 0.7)
-      ]);
-
       const payload = {
-        id: `look_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
         uid: user.uid,
         styleId: selectedOverlay,
         styleName: getStyleName(selectedOverlay),
         category: category,
-        originalImage: compressedOriginal,
-        generatedImage: compressedGenerated,
+        originalImage: image,
+        generatedImage: currentGeneratedImage,
         perspective: perspective,
-        createdAt: new Date().toISOString()
+        createdAt: new Date()
       };
       
-      const newSavedLooks = [...savedLooks, payload];
-      localStorage.setItem(`saved_looks_${user.uid}`, JSON.stringify(newSavedLooks));
-      setSavedLooks(newSavedLooks);
+      const docRef = await addDoc(collection(db, 'saved_looks'), {
+        ...payload,
+        createdAt: serverTimestamp()
+      });
+      
+      setSavedLooks(prev => [...prev, { id: docRef.id, ...payload }]);
     } catch (err) {
       console.error("Error saving look:", err);
+      handleFirestoreError(err, OperationType.WRITE, 'saved_looks');
     } finally {
       setIsSavingLook(false);
     }
   };
 
   const handleDeleteLook = async (lookId: string) => {
-    if (!user) return;
     try {
-      const newSavedLooks = savedLooks.filter(look => look.id !== lookId);
-      localStorage.setItem(`saved_looks_${user.uid}`, JSON.stringify(newSavedLooks));
-      setSavedLooks(newSavedLooks);
+      await deleteDoc(doc(db, 'saved_looks', lookId));
+      setSavedLooks(prev => prev.filter(look => look.id !== lookId));
     } catch (err) {
       console.error("Error deleting look:", err);
+      handleFirestoreError(err, OperationType.DELETE, 'saved_looks');
     }
   };
   
@@ -1141,7 +1104,14 @@ export function AIStylist({ onBookStyle }: { onBookStyle: (id: string) => void }
                 Inicia sesión de forma segura para poder guardar tus simulaciones de peinados y barbas generadas por IA. Podrás acceder a ellas desde cualquier dispositivo y mostrárselas directamente a tu barbero.
               </p>
               <button
-                onClick={() => login()}
+                onClick={async () => {
+                  const provider = new GoogleAuthProvider();
+                  try {
+                    await signInWithPopup(auth, provider);
+                  } catch (error) {
+                    console.error('Login failed', error);
+                  }
+                }}
                 className="bg-primary text-on-primary px-8 py-4 rounded-full font-label uppercase text-xs tracking-widest font-bold hover:bg-primary/90 transition-all shadow-lg flex items-center gap-2"
               >
                 <User size={16} />
