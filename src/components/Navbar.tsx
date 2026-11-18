@@ -30,8 +30,9 @@ export function Navbar() {
 
   const navLinks = [
     { name: 'La Esencia', href: '#esencia' },
-    { name: 'El Menú', href: '#menu' },
     { name: 'Espejo Virtual', href: '#ai-stylist' },
+    { name: 'El Menú', href: '#menu' },
+    { name: 'Maestros', href: '#maestros' },
     { name: 'La Boutique', href: '#boutique' },
     { name: 'Galería', href: '#galeria' },
     { name: 'Suscripciones', href: '#suscripciones' },

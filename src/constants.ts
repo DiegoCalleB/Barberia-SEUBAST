@@ -61,6 +61,34 @@ export const SERVICES = [
   }
 ];
 
+export interface BarberRecipe {
+  clipperGuard: string;
+  scissorWork: string;
+  contours: string;
+  maintenanceDays: string;
+}
+
+export const SAMPLE_PORTRAITS = [
+  {
+    id: 'sample-classic',
+    name: 'Rostro Ovalado',
+    subtitle: 'Cabello medio',
+    image: '/cortes_pelo/Corte_Clasico.jpg'
+  },
+  {
+    id: 'sample-urban',
+    name: 'Rostro Angular',
+    subtitle: 'Cabello corto',
+    image: '/cortes_pelo/corte_taper.jpg'
+  },
+  {
+    id: 'sample-beard',
+    name: 'Rostro con Barba',
+    subtitle: 'Barba densa',
+    image: '/cortes_barba/tres_dias.jpg'
+  }
+];
+
 export const HAIRCUT_STYLES = [
   {
     id: 'fade',
@@ -69,7 +97,14 @@ export const HAIRCUT_STYLES = [
     aiPrompt: 'Genera un corte de pelo estilo "Fade" o Degradado. La transición debe ser muy limpia desde la piel (skin fade) sin líneas bruscas, difuminado progresivamente hacia la parte superior. Deja longitud y textura en la parte de arriba.',
     duration: 45,
     price: 16.90,
-    image: '/cortes_pelo/corte_fade.jpg'
+    image: '/cortes_pelo/corte_fade.jpg',
+    recommendedProductId: 'polvos-volumen',
+    barberRecipe: {
+      clipperGuard: 'Navaja / #0.5 a #1.5 en laterales (transición media)',
+      scissorWork: '4–5 cm en zona superior con texturizado point-cut',
+      contours: 'Perfilado limpio a navaja en patillas y nuca',
+      maintenanceDays: 'Cada 14–18 días'
+    }
   },
   {
     id: 'classic',
@@ -78,7 +113,14 @@ export const HAIRCUT_STYLES = [
     aiPrompt: 'Genera un corte clásico y elegante de caballero hecho todo a tijera (Executive contour). No debe haber zonas rapadas, manteniendo los laterales peinados e integrados perfectamente con la parte superior, con raya lateral y aspecto limpio.',
     duration: 40,
     price: 14.90,
-    image: '/cortes_pelo/Corte_Clasico.jpg'
+    image: '/cortes_pelo/Corte_Clasico.jpg',
+    recommendedProductId: 'pomada-fuerte',
+    barberRecipe: {
+      clipperGuard: 'Sin máquina (100% tijera sobre peine en laterales)',
+      scissorWork: '6–7 cm arriba conectado en capas suaves con raya lateral',
+      contours: 'Contorno natural en nuca y patilla clásica a media oreja',
+      maintenanceDays: 'Cada 25–30 días'
+    }
   },
   {
     id: 'crop',
@@ -87,7 +129,14 @@ export const HAIRCUT_STYLES = [
     aiPrompt: 'Genera un peinado "French Crop". Los laterales deben estar rapados o con un degradado alto. La parte superior debe ir peinada hacia adelante con flequillo corto y texturizado para que note mucho movimiento y desorden ordenado.',
     duration: 35,
     price: 15.90,
-    image: '/cortes_pelo/Corte_flequillo.jpg'
+    image: '/cortes_pelo/Corte_flequillo.jpg',
+    recommendedProductId: 'cera-mate',
+    barberRecipe: {
+      clipperGuard: '#0 a #1.5 con caída suave tras la sien (Drop Fade)',
+      scissorWork: '3–4 cm arriba peinado hacia adelante con tijera de entresacar',
+      contours: 'Flequillo recto texturizado a mitad de frente',
+      maintenanceDays: 'Cada 15–20 días'
+    }
   },
   {
     id: 'mullet',
@@ -96,16 +145,30 @@ export const HAIRCUT_STYLES = [
     aiPrompt: 'Genera un corte estilo "Mullet" moderno. Laterales cortos o rapados, mientras que debe conservar mucha longitud y volumen en la zona de la nuca y el cuello trasero. Zona frontal desaliñada.',
     duration: 50,
     price: 17.90,
-    image: '/cortes_pelo/Corte_seta.jpg' // Fallback mapping as user didn't explicitly upload "mullet" but did an array of cuts
+    image: '/cortes_pelo/Corte_seta.jpg',
+    recommendedProductId: 'polvos-volumen',
+    barberRecipe: {
+      clipperGuard: 'Taper Fade #0.5 a #2 solo en zona de patillas y sienes',
+      scissorWork: 'Desfilado a navaja en coronilla y nuca larga desconectada',
+      contours: 'Arco limpio sobre la oreja respetando caída trasera',
+      maintenanceDays: 'Cada 20–25 días'
+    }
   },
   {
     id: 'buzz',
     name: 'Rapado a Máquina / Buzz Cut',
-    description: 'Uniforme, rápido y muy cómo. Ideal para no tener que peinarse.',
+    description: 'Uniforme, rápido y muy cómodo. Ideal para no tener que peinarse.',
     aiPrompt: 'Genera un corte "Buzz Cut" (rapado a máquina completo). Todo el cabello debe verse de una longitud muy reducida de manera uniforme (1-3 milímetros) y perfilado perfectamente en la frente.',
     duration: 20,
     price: 12.90,
-    image: '/cortes_pelo/corte_rapado.jpg'
+    image: '/cortes_pelo/corte_rapado.jpg',
+    recommendedProductId: 'aftershave-balm',
+    barberRecipe: {
+      clipperGuard: '#2 en zona superior con degradado #0.5 en laterales',
+      scissorWork: 'Sin tijera (repaso de precisión a máquina en remolinos)',
+      contours: 'Línea frontal geométrica marcada con trimmer y navaja',
+      maintenanceDays: 'Cada 10–14 días'
+    }
   },
   {
     id: 'pompadour',
@@ -114,7 +177,14 @@ export const HAIRCUT_STYLES = [
     aiPrompt: 'Genera un "Pompadour" o tupé clásico muy voluminoso. Los laterales en degradado y muchísimo volumen en el flequillo que se echa hacia atrás con fijador fuerte. Debe verse muy pulcro.',
     duration: 50,
     price: 18.90,
-    image: '/cortes_pelo/corte_pompadour.jpg'
+    image: '/cortes_pelo/corte_pompadour.jpg',
+    recommendedProductId: 'pomada-fuerte',
+    barberRecipe: {
+      clipperGuard: '#1 a #2 en laterales con compresión en parietal',
+      scissorWork: '8–10 cm en frontal decreciendo hacia coronilla con secador',
+      contours: 'Nuca en degradado limpio y patilla afilada',
+      maintenanceDays: 'Cada 18–21 días'
+    }
   },
   {
     id: 'mohawk',
@@ -123,7 +193,14 @@ export const HAIRCUT_STYLES = [
     aiPrompt: 'Genera una cresta "Mohawk". Laterales afeitados a cero y una franja central de cabello largo levantada o despeinada en punta con mucha textura y rebeldía.',
     duration: 45,
     price: 16.90,
-    image: '/cortes_pelo/corte_mohicano.jpg'
+    image: '/cortes_pelo/corte_mohicano.jpg',
+    recommendedProductId: 'cera-mate',
+    barberRecipe: {
+      clipperGuard: '#0 a #1 en laterales en curva hacia la nuca (Burst Fade)',
+      scissorWork: 'Franja central de 5–6 cm texturizada en picos',
+      contours: 'Diseño lateral marcado a navaja en sien',
+      maintenanceDays: 'Cada 14–18 días'
+    }
   },
   {
     id: 'top-knot',
@@ -132,7 +209,14 @@ export const HAIRCUT_STYLES = [
     aiPrompt: 'Genera un "Top Knot" (moño de samurai). Los lados y la parte posterior muy rapados (undercut), y un moño tirante o coleta pequeña amarrada en la parte alta de la coronilla.',
     duration: 40,
     price: 15.90,
-    image: '/cortes_pelo/corte_cabello_largo.jpg'
+    image: '/cortes_pelo/corte_cabello_largo.jpg',
+    recommendedProductId: 'aceite-barba',
+    barberRecipe: {
+      clipperGuard: 'Undercut #1 o degradado alto desconectado de la zona larga',
+      scissorWork: 'Saneado de puntas en zona superior (+15 cm) para recogido',
+      contours: 'Línea de desconexión nítida y nuca afeitada a navaja',
+      maintenanceDays: 'Cada 20–25 días'
+    }
   },
   {
     id: 'slick-back',
@@ -141,7 +225,14 @@ export const HAIRCUT_STYLES = [
     aiPrompt: 'Genera un "Slick Back" estilo años 20. Todo el cabello engominado, tirante y peinado hacia atrás de forma ultra elegante y brillante. Sin volumen superior, todo muy pegado a la cabeza.',
     duration: 35,
     price: 14.90,
-    image: '/cortes_pelo/corte_comb_over.jpg'
+    image: '/cortes_pelo/corte_comb_over.jpg',
+    recommendedProductId: 'pomada-fuerte',
+    barberRecipe: {
+      clipperGuard: '#1.5 a #3 en laterales o tijera pulida hacia atrás',
+      scissorWork: '7–8 cm arriba vaciado internamente para caída plana hacia atrás',
+      contours: 'Contorno de oreja despejado a tijera y navaja',
+      maintenanceDays: 'Cada 21–25 días'
+    }
   }
 ];
 
@@ -153,7 +244,14 @@ export const BEARD_STYLES = [
     aiPrompt: 'Coloca una barba tipo "stubble" o de pocos días (3 días aprox). Es un sombreado uniforme que debe marcar muy bien la línea de la mandíbula pero con un aspecto relajado y sin longitud sobrante.',
     duration: 15,
     price: 7.00,
-    image: '/cortes_barba/tres_dias.jpg'
+    image: '/cortes_barba/tres_dias.jpg',
+    recommendedProductId: 'aftershave-balm',
+    barberRecipe: {
+      clipperGuard: 'Máquina #1 (3 mm) en mejillas y #1.5 (4.5 mm) en mentón',
+      scissorWork: 'Despeje de labio superior con trimmer de precisión',
+      contours: 'Línea de cuello 2 dedos sobre la nuez y mejilla natural a navaja',
+      maintenanceDays: 'Cada 7–10 días'
+    }
   },
   {
     id: 'beard-corporate',
@@ -162,7 +260,14 @@ export const BEARD_STYLES = [
     aiPrompt: 'Coloca una barba completa o "Corporate Beard". Tiene longitud pero está cuidada al milímetro. La línea de debajo del cuello debe estar perfectamente afeitada y las líneas de perfilado de mejilla deben ser hiper precisas.',
     duration: 25,
     price: 12.00,
-    image: '/cortes_barba/hipster.jpg'
+    image: '/cortes_barba/hipster.jpg',
+    recommendedProductId: 'aceite-barba',
+    barberRecipe: {
+      clipperGuard: 'Degradado de patilla #1 hacia #3 (10 mm) en mandíbula',
+      scissorWork: 'Esculpido a mano alzada con tijera sobre peine para simetría',
+      contours: 'Líneas de mejilla y cuello definidas con toalla caliente y navaja',
+      maintenanceDays: 'Cada 12–15 días'
+    }
   },
   {
     id: 'beard-viking',
@@ -171,7 +276,14 @@ export const BEARD_STYLES = [
     aiPrompt: 'Añade una barba vikinga épica. Muy larga y abundante que cuelgue del mentón, pero se debe notar cuidada y peinada con un suave acabado final. Must be robust and massive.',
     duration: 35,
     price: 15.00,
-    image: '/cortes_barba/full_bear_oso.jpg'
+    image: '/cortes_barba/full_bear_oso.jpg',
+    recommendedProductId: 'cepillo-barba-viking',
+    barberRecipe: {
+      clipperGuard: 'Solo transición en patilla (#1.5 a libre caída)',
+      scissorWork: 'Estructura cuadrada a tijera manteniendo máximo volumen en mentón',
+      contours: 'Limpieza alta en pómulo con aceite térmico y navaja',
+      maintenanceDays: 'Cada 20–25 días'
+    }
   },
   {
     id: 'beard-goatee',
@@ -180,7 +292,14 @@ export const BEARD_STYLES = [
     aiPrompt: 'Coloca una perilla "Goatee" tradicional. Barba confinada únicamente a la barbilla y unida al bigote. El resto de mejillas y mandíbula deben estar completamente afeitadas.',
     duration: 20,
     price: 9.00,
-    image: '/cortes_barba/candado.jpg'
+    image: '/cortes_barba/candado.jpg',
+    recommendedProductId: 'aftershave-balm',
+    barberRecipe: {
+      clipperGuard: '#2 a #3 en el candado central de bigote y mentón',
+      scissorWork: 'Perfilado de unión en comisuras al ancho de la sonrisa',
+      contours: 'Afeitado apurado a navaja con espuma caliente en ambas mejillas',
+      maintenanceDays: 'Cada 10–14 días'
+    }
   },
   {
     id: 'beard-balbo',
@@ -189,7 +308,14 @@ export const BEARD_STYLES = [
     aiPrompt: 'Añade un estilo "Balbo". El bigote largo flotante separado de la barba, y una barba espesa en la barbilla que se estira un poco por la mandíbula formando una T invertida. Mejillas afeitadas.',
     duration: 30,
     price: 14.00,
-    image: '/cortes_barba/ancla.jpg'
+    image: '/cortes_barba/ancla.jpg',
+    recommendedProductId: 'peine-sandalo',
+    barberRecipe: {
+      clipperGuard: '#2 en arco inferior de mandíbula y #3 en mosca y mentón',
+      scissorWork: 'Bigote independiente peinado y desconectado 5 mm de la barba',
+      contours: 'Patillas y mejillas rasuradas al ras con navaja recta',
+      maintenanceDays: 'Cada 10–14 días'
+    }
   },
   {
     id: 'beard-van-dyke',
@@ -198,7 +324,14 @@ export const BEARD_STYLES = [
     aiPrompt: 'Coloca un "Van Dyke". Un bigote con las puntas ligeramente rizadas o estiradas, separado de un pequeño parche de pelo afilado y puntiagudo en la barbilla. Muy teatral.',
     duration: 25,
     price: 12.00,
-    image: '/cortes_barba/van_dyke.jpg'
+    image: '/cortes_barba/van_dyke.jpg',
+    recommendedProductId: 'peine-sandalo',
+    barberRecipe: {
+      clipperGuard: '#2.5 en barbilla estrechándose hacia la punta del mentón',
+      scissorWork: 'Tijera fina en puntas del bigote para forma ascendente',
+      contours: 'Afeitado total de mandíbula lateral y mejillas a navaja',
+      maintenanceDays: 'Cada 10–12 días'
+    }
   },
   {
     id: 'beard-mutton-chops',
@@ -207,7 +340,14 @@ export const BEARD_STYLES = [
     aiPrompt: 'Ponle "Mutton Chops". Unas enormes patillas retro que dominan toda la mejilla uniéndose al bigote, mientras el área entera de la barbilla o mentón está completamente rapada al ras.',
     duration: 30,
     price: 14.00,
-    image: '/cortes_barba/chevron.jpg'
+    image: '/cortes_barba/chevron.jpg',
+    recommendedProductId: 'shampoo-barba',
+    barberRecipe: {
+      clipperGuard: '#3 a #4 en patillas ensanchadas hacia la comisura labial',
+      scissorWork: 'Conexión continua entre patilla y bigote sin escalones',
+      contours: 'Mentón y bajo labio afeitados a navaja con contraste limpio',
+      maintenanceDays: 'Cada 12–15 días'
+    }
   },
   {
     id: 'beard-garibaldi',
@@ -216,7 +356,14 @@ export const BEARD_STYLES = [
     aiPrompt: 'Añade una barba "Garibaldi". Una gran barba abundante, algo salvaje arriba, pero que en la base o borde inferior se ha recortado con máquina formando una perfecta curva ancha circular y simétrica.',
     duration: 40,
     price: 16.00,
-    image: '/cortes_barba/garibaldi.jpg'
+    image: '/cortes_barba/garibaldi.jpg',
+    recommendedProductId: 'cepillo-barba-viking',
+    barberRecipe: {
+      clipperGuard: 'Degradado suave en patilla con base densa de 10–15 cm',
+      scissorWork: 'Base inferior redondeada a tijera en forma de U amplia',
+      contours: 'Bigote natural integrado y línea de pómulo natural limpia',
+      maintenanceDays: 'Cada 18–22 días'
+    }
   }
 ];
 
@@ -227,7 +374,9 @@ export const COMBINED_STYLES = [
     description: 'Corte clásico a tijera y barba arreglada impecable. Ideal para transmitir confianza.',
     duration: 60,
     price: 25.00,
-    image: '/cortes_pelo/Corte_Clasico.jpg'
+    image: '/cortes_pelo/Corte_Clasico.jpg',
+    hairId: 'classic',
+    beardId: 'beard-corporate'
   },
   {
     id: 'look-modern-viking',
@@ -235,7 +384,9 @@ export const COMBINED_STYLES = [
     description: 'Rapado o degradado alto y barba vikinga. El contraste más duro y llamativo.',
     duration: 55,
     price: 26.00,
-    image: '/cortes_barba/full_bear_oso.jpg'
+    image: '/cortes_barba/full_bear_oso.jpg',
+    hairId: 'fade',
+    beardId: 'beard-viking'
   },
   {
     id: 'look-urban-fade',
@@ -243,7 +394,9 @@ export const COMBINED_STYLES = [
     description: 'Degradado medio muy perfilado y barba sombreada de pocos días. Frescura total.',
     duration: 50,
     price: 22.00,
-    image: '/cortes_pelo/corte_fade.jpg'
+    image: '/cortes_pelo/corte_fade.jpg',
+    hairId: 'fade',
+    beardId: 'beard-short'
   }
 ];
 

@@ -4,7 +4,7 @@ import { ArrowRight } from 'lucide-react';
 
 export function Hero() {
   return (
-    <section className="relative h-screen min-h-[600px] md:min-h-[800px] flex items-center overflow-hidden">
+    <section id="esencia" className="relative h-screen min-h-[600px] md:min-h-[800px] flex items-center overflow-hidden">
       <div className="absolute inset-0 z-0">
         <img
           alt="Barbería de lujo vintage"

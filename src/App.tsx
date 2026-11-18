@@ -1,13 +1,13 @@
 import React from 'react';
 import { Navbar } from './components/Navbar';
-import { Hero } from './components/Hero';
 import { Menu } from './components/Menu';
-import { Styles } from './components/Styles';
 import { AIStylist } from './components/AIStylist';
 import { Boutique } from './components/Boutique';
 import { Gallery } from './components/Gallery';
 import { Subscriptions } from './components/Subscriptions';
 import { Testimonials } from './components/Testimonials';
+import { MasterBarbers } from './components/MasterBarbers';
+import { LoyaltyPassport } from './components/LoyaltyPassport';
 import { Footer } from './components/Footer';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { BookingModal } from './components/BookingModal';
@@ -15,6 +15,7 @@ import { BookingModal } from './components/BookingModal';
 export default function App() {
   const [isBookingModalOpen, setIsBookingModalOpen] = React.useState(false);
   const [preSelectedStyleId, setPreSelectedStyleId] = React.useState<string | null>(null);
+  const [preSelectedBarberId, setPreSelectedBarberId] = React.useState<string | null>(null);
 
   // Global click handler to open the native booking modal
   const handleOpenBooking = (e: React.MouseEvent) => {
@@ -24,6 +25,7 @@ export default function App() {
       const text = button.innerText.toLowerCase();
       if (text.includes('reservar') || text.includes('suscribirse')) {
         setPreSelectedStyleId(null);
+        setPreSelectedBarberId(null);
         setIsBookingModalOpen(true);
       }
     }
@@ -31,6 +33,12 @@ export default function App() {
 
   const handleAIStyleBooking = (styleId: string) => {
     setPreSelectedStyleId(styleId);
+    setPreSelectedBarberId(null);
+    setIsBookingModalOpen(true);
+  };
+
+  const handleBarberBooking = (barberId: string) => {
+    setPreSelectedBarberId(barberId);
     setIsBookingModalOpen(true);
   };
 
@@ -39,11 +47,11 @@ export default function App() {
       <div className="min-h-screen bg-background" onClick={handleOpenBooking}>
         <Navbar />
         <main>
-          <Hero />
-          <Menu />
-          <Styles />
           <AIStylist onBookStyle={handleAIStyleBooking} />
+          <Menu />
+          <MasterBarbers onBookBarber={handleBarberBooking} />
           <Boutique />
+          <LoyaltyPassport />
           <Gallery />
           <Subscriptions />
           <Testimonials />
@@ -87,8 +95,10 @@ export default function App() {
         onClose={() => {
           setIsBookingModalOpen(false);
           setPreSelectedStyleId(null);
+          setPreSelectedBarberId(null);
         }} 
         initialStyleId={preSelectedStyleId}
+        initialBarberId={preSelectedBarberId}
       />
     </ErrorBoundary>
   );
